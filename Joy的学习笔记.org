@@ -1,0 +1,1259 @@
+#+TITLE: Joy的学习笔记
+#+DATE: <2018-01-13 Sat 17:07>
+#+Author: NewJoy
+#+TAGS: Linux, Study, Notes, Emacs
+#+LAYOUT: post
+#+CATEGORIES: Joy
+* Introduction
+
+  Haven't set foot on this for months, need to start working now.<2018-01-25 四 12:21>
+
+  Why
+  This is the notes for the twisted path I have taken since I march on the road of Linux, just some small pieces and a reminder of what I have done. This is really not that organized.
+
+  除非你相当熟悉 Lisp ，这个简介像是无意义的言论和冠冕堂皇的声明。Lisp 凌驾面向对象程序设计？ 你创造适合你程序的语言？ Lisp 编程是即时的？ 
+
+这些说法是什么意思？现在这些说法就像是枯竭的湖泊。随着你学到更多实际的 Lisp 特色，见过更多可运行的程序，这些说法就会被实际经验之水所充满，而有了dpkg --install webmin_1.850_all.deb明确的形状。
+  - quoted from https://giUseful
+
+  在好奇心的驱使下，人总是很勤劳。
+  当我初学的时候，我真的不太喜欢泛泛的介绍，我想尽快看到些吸引眼球的东西
+  - quoted from <<Orange's 一个操作系统的实现>>
+
+  另一方面，学习 Linux 命令行会让你受益匪浅，给你极大的回报。如果你认为， 现在你已经是高手了。别急，其实你还不知道什么才是真正的高手。不像其他一些计算机技能， 一段时间之后可能就被淘汰了，命令行知识却不会落伍，你今天所学到的，在十年以后， 都会有用处。命令行通过了时间的检验。
+  - quoted from <<The Linux Command Line>>
+
+* CPU
+  IA-32 is the 32-bit version of the x86 instruction set architecture(ISA)
+  The Intel 80386, also known as i386 or just 386, is a 32-bit microprocessor introduced in 1985
+
+** gate
+   
+*** task gate
+
+*** interrupt gate
+    
+**** Interrupt Descriptor Table
+     由于IDT的界限为16位（\[2^{16}=64KB\]）、表项大小为8B，所以IDT中最多可有（\[2^{16}/2^{3}=2^{13}=8192=（8K）\]）个门描述符表项。中断发生时，CPU根据中断号*8+IDTR中的基址=中断程序入口地址，来调用对应的中断处理程序。
+
+*** trap gate
+
+*** call gate
+
+* Terminal command
+
+** locate/print block device attributes
+   #+BEGIN_SRC sh
+   sudo blkid
+   #+END_SRC
+
+** About scrolling back to previous executed command
+   #+BEGIN_SRC 
+   Right-M-p
+   Right-M-n
+   #+END_SRC
+** references
+   [[https://billie66.github.io/TLCL/book/][linux shell]]
+   [[https://billie66.github.io/][Billie's blog]]
+** Switch caplock and ctrl
+   #+BEGIN_SRC sh
+   sudo gedit /etc/default/keyboard
+   XKBOPTIONS="ctrl:swapcaps"
+   sudo dpkg-reconfigure keyboard-configuration
+   #+END_SRC
+** Convert text file encoding
+   #+BEGIN_SRC sh
+   iconv -f
+   #+END_SRC
+** mounting iso
+   1. make a directory where you want to access the files
+   2. mount
+    #+BEGIN_SRC sh
+    mkdir FILENAME
+    sudo mount -o loop /path/to/FILENAME.iso /path/to/FILENAME
+    #+END_SRC
+** Speed up(better performance)
+   - To check tmpfs
+     #+BEGIN_SRC sh
+     df
+     #+END_SRC
+   - Some Sites for RAM
+     1. http://www.upubuntu.com/2012/06/11-tips-to-speed-up-computers-running.html
+     2. https://fixmynix.com/speed-up-firefox-with-ram-cache-and-tmpfs-linux/
+** Customize Terminal
+   FbTerm - a fast Frame Buffer Based TERMINAL emulator for linux
+** Saving power
+*** Using tlp
+**** Preparation
+    #+BEGIN_SRC sh
+    sudo add-apt-repository ppa:linrunner/tlp
+    sudo apt-get update
+    #+END_SRC
+
+    - tlp (PPA or universe) – Power saving
+    - tlp-rdw (PPA or universe) – optional, Radio Device Wizard
+    - tp-smapi-dkms (PPA or universe) – optional ThinkPad only, tp-smapi is needed for battery charge thresholds, recalibration and specific status output of tlp-stat
+    - acpi-call-dkms (PPA or universe) – optional ThinkPad only, acpi-call is needed for battery charge thresholds and recalibration on Sandy Bridge and newer models (X220/T420, X230/T430 et al.)
+**** Configuration
+     All TLP settings are stored in the config file /etc/default/tlp. As the default configuration already provides for optimized battery saving, in many cases there is no immediate need to change it. The full reference can be read at TLP Configuration.
+**** Start
+     TLP will start automatically. To avoid having to restart the system, the first time you can start it manualsudo apt-get --reinstall install virtualbox-dkmsly by using the following command:
+     #+BEGIN_SRC sh
+     sudo tlp start
+     #+END_SRC
+**** Check
+     Use the tlp-stat terminal command to check if TLP is working properly
+     #+BEGIN_SRC sh
+     sudo tlp-stat -s
+     #+END_SRC
+**** Terminal Commands
+     *Hint*: all commands described in this section that are shown with sudo, may be executed without sudo in a root shell.
+***** wifi, bluetooth, wwan
+      Enable, disable or check the state of builtin wifi, bluetooth and wwan (3G or UMTS) radios:
+      #+BEGIN_SRC sh
+      wifi [ on | off | toggle ]
+      #+END_SRC
+
+      *Hint*: for Intel 2200bg and 2915abg cards call the command with sudo or in a root shell.
+      #+BEGIN_SRC sh
+      bluetooth [ on | off | toggle ]
+      wwan [ on | off | toggle ]
+      #+END_SRC
+
+      Prerequisite: the radio device must be supported by the kernel's rfkill framework (except Intel 2100/2200/2915). This may be checked with
+      #+BEGIN_SRC sh
+      rfkill list
+      #+END_SRC
+***** The remaining parts can be found on
+      http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
+
+*** Reduce method
+    Due to very low battery capacity.
+    - Need to lower power usage when not using wi-fi
+    #+BEGIN_SRC sh
+    sudo iwconfig wlan0 txpower off
+    sudo iwconfig wlan0 txpower on
+    #+END_SRC
+
+    - Reduce Disk Writes
+      noatime - Disable access time update of files in HDD.
+      nodiratime - Disable access time update of directories in HDD
+      relatime - Update access time relative to modify or change time. Access time is only updated if the previous access time was earlier than the current modify or change time.
+    #+BEGIN_SRC sh
+    Mount -o remount,relatime /
+    #+END_SRC
+
+    - Hard disk
+      Some hard disk manufacturer build power saving options into their hardware so that we can reduce the energy that our hard disk consume. We can only turn on this power saving option when we see AdvancedPM=yes after executing the following command in the console:
+    #+BEGIN_SRC sh
+    hdparm -i /dev/sda
+    hdparm -B 1 -S 12 /dev/sda
+    #+END_SRC
+
+   - laptop mode
+     #+BEGIN_SRC sh
+     sudo gedit /proc/sys/vm/laptop_mode
+     #+END_SRC
+
+   - Check power usage
+   #+BEGIN_SRC sh
+   sudo powertop
+   #+END_SRC
+
+** I/O equipment
+  - Disable laptop keyboard
+  #+BEGIN_SRC sh
+  xinput
+  xinput float <id>
+  xinput reattach <id> <slave keyboard (id)>
+  #+END_SRC
+
+  - Show detail disk usage
+  #+BEGIN_SRC sh
+  du -sh
+  #+END_SRC
+
+  - Show shortcut launching details
+  #+BEGIN_SRC sh
+  cd /usr/share/applications
+  ls
+  #+END_SRC
+
+  - Enable switching to Chinese input method
+  #+BEGIN_SRC sh
+  env LC_CTYPE=zh_CN.UTF-8 emacs
+#+END_SRC
+
+** Proxy
+
+   After setting up polipo, use alias to set http_proxy
+
+   #+BEGIN_SRC sh
+   alias setproxy="export http_proxy=\"http://127.0.0.1:8123\""
+   #+END_SRC
+
+   - git proxy
+     #+BEGIN_SRC sh
+     git config --global http.proxy 'socks5://127.0.0.1:1080'
+     git config --global https.proxy 'socks5://127.0.0.1:1080'
+     #+END_SRC
+ 
+   -      为终端挂代理
+
+      Adding it to etc
+
+      #+BEGIN_SRC sh
+      sudo gedit /etc/profile.d/apps-bin-path.sh
+      export http_proxy="http://127.0.0.1:8123"
+
+      source /etc/profile
+      #+END_SRC
+
+      #+BEGIN_SRC sh
+        service polipo start
+
+        export http_proxy="http://127.0.0.1:8123"
+      #+END_SRC
+      Mind that        export http_proxy="http://127.0.0.1:8123/" is invalid
+    - Add these into config file of polipo
+
+      #+BEGIN_SRC sh
+        sudo gedit /etc/polipo/config
+      #+END_SRC
+
+      #+BEGIN_SRC text
+      # Uncomment this if you want to use a parent SOCKS proxy:
+
+      socksParentProxy = "localhost:1080"
+      socksProxyType = socks5
+
+
+      #+END_SRC
+
+   - 停止代理
+     #+BEGIN_SRC sh
+       service polipo stop
+
+       unset http_proxy
+     #+END_SRC
+     注意，这里没有$
+* Linux
+** Permissions
+*** Root users
+
+    Check specified user's permissions on Linux with root access?
+    
+    https://unix.stackexchange.com/questions/87114/how-do-i-know-a-specified-users-permissions-on-linux-with-root-access
+
+** For the intel graphics card 520's issue have to update kernel
+
+   the original version by =uname -r= is 4.4.0-83-generic
+
+   I have installed from =.deb= with =dpkg -i=, now have to remove the old kernel
+   
+** Linux on Android
+   chroot
+** About x86_32 and x86_64
+    正如你看到的，64 位程序仅仅比 32 位程序快了 4%，体积大了 9%。由此可见，单纯的追逐 64 位系统其实并没有太大的必要。但是，假如你的电脑的内存超过了 4 GB 又或者说需要操作大于 4 GB 的数据，64 位系统的优势就比较明显了。 但是对于某些只支持64位的库，兼容性看来64位会比较省心。
+    linked from https://lctt.github.io/LFS-BOOK/LFS-SYSD-BOOK.html
+*** About linking tool ld
+    If want to compile the file as 32bits composition, you can use:
+    #+BEGIN_SRC sh
+    ld -m elf_i386 -s -o file.o file
+    ld -m elf_i386 -o exename file.o
+    #+END_SRC
+* Compiler
+** gcc
+   将c代码转换为汇编语言
+   #+BEGIN_SRC sh
+   gcc -S example.c
+   #+END_SRC
+* Programming Languages
+
+** racket
+   An interesting article about racket learning
+   http://beautifulracket.com/appendix/why-racket-why-lisp.html
+** matlab/octave(given the similarity of the language)
+*** Octave
+    pkg install -forge /package_name/
+
+    pkg load /package_name/
+**** pre-defined variables
+    | 特殊变量 | 取值                 |
+    |----------+----------------------|
+    | ans      | 用于结果的缺省变量名 |
+    |          |                      |
+
+** python
+*** pip
+**** virtualenv
+     
+     Create new virtual environment
+     =virtualenv ENV=
+
+** The "org" directive
+   Interesting. What happens to my program if it's loaded somewhere else? And then, why does org exist at all? – proc-self-maps Nov 15 '11 at 17:35 
+   If it's loaded somewhere else, the offsets calculated by the assembler (such as the address of the szHello label) will be wrong and what happens next is anyone's guess. – Igor Skochinsky Nov 15 '11 at 17:43 
+   From https://stackoverflow.com/questions/8140016/x86-nasm-org-directive-meaning
+** Assembly language
+*** Real mode
+
+    Some reference
+    http://wiki.osdev.org/
+    
+    In real mode, segment registers like:
+    
+    #+BEGIN_EXAMPLE
+    es, ds, ss, cs, gs, fs(gs, fs added since i386)
+    #+END_EXAMPLE
+    
+    are 16 bit-wide registers to set *segment*. Segments are a block of address, and in real mode, it's 16 bit wide (limited by ip). 
+
+    And segment registers are also 16-bit wide, so the 16-bit CPU having 20-bit wide address have to use segment registers to point to 20-bit address.
+
+    physical address = segment register < 4 + ip
+
+    So there is 16 segments(\[2^{20-16}\]), each 64KB(\[2^{16}\]) long. Therefore usually the segment registers only have four last bits as 0, and using the first bit to point to one of the 16 segments.
+*** NASM
+
+    https://github.com/yasm/yasm/wiki/NasmSyntax
+    NASM also supports a local-label mechanism. This system prevents naming conflicts by allowing labels of the same name to exist in different contexts. Label names beginning with a dot (.) become "local" to the last non-local label NASM sees. 
+
+*** About COM
+    程序代码会被加载到CS + 100h处，从CS:0~CS:100h-4的252B用作栈（之所以要-4，是DOS对COM程序的要求：留出4B存放返回系统的CS:IP地址）。
+*** repl
+**** Rappel
+     missing histedit.h, run
+     #+BEGIN_SRC sh
+     sudo apt install libedit-dev
+     #+END_SRC
+
+     
+     To make x86 on amd64, missing -ledit
+     #+BEGIN_SRC sh
+     sudo apt install libedit-dev:i386
+     #+END_SRC
+     
+
+     When showing:
+     #+BEGIN_SRC sh
+     execlp: No such file or directory
+     nasm exited 1.
+     #+END_SRC
+     
+     Require nasm installed:
+     #+BEGIN_SRC sh
+     sudo apt-get install nasm
+     #+END_SRC
+
+
+     can's compile with -m32, missing 32bits library
+     #+BEGIN_SRC sh
+     sudo apt install g++-multilib
+     #+END_SRC
+* Windows
+** On G40-30
+
+   1. Tweaking BIOS accordingly
+
+      https://forums.lenovo.com/t5/forums/v3_1/forumtopicpage/board-id/ll03_en/thread-id/39787/page/2
+
+      https://answers.microsoft.com/en-us/windows/forum/windows_7-hardware/a-required-cddvd-device-driver-is-missing-usb/61eda679-66cc-4512-b175-d02871394461
+
+   2. change bios from usb3.0 to usb2.0, which shows up after setting for OS win 7, and select defauct
+
+   3. install drivers downloaded from lenovo support. 
+      
+
+* Web
+
+** Virutal Private Server
+   1. https://www.vultr.com/
+** How to setup LAMP server
+
+   http://howtoubuntu.org/how-to-install-lamp-on-ubuntu
+
+** server
+
+*** mysql
+
+**** Update Error
+
+     https://bugs.launchpad.net/ubuntu/+source/mysql-5.7/+bug/1605948
+
+     Solution is in the replies
+*** tomcat8 
+*** webmin
+**** Error regarding running in SSL mode
+
+     Failed in accessing using ip address and URL
+     http://eitwebguru.com/webmin-error-the-web-server-is-running-in-ssl-mode/
+
+*** brigded adapter
+  
+*** File sharing
+**** Samba file system
+***** How to create samba
+
+      https://help.ubuntu.com/community/How%20to%20Create%20a%20Network%20Share%20Via%20Samba%20Via%20CLI%20%28Command-line%20interface/Linux%20Terminal%29%20-%20Uncomplicated%2C%20Simple%20and%20Brief%20Way%21
+
+***** Failed to add entry for the user student
+      
+      according to https://askubuntu.com/questions/362852/samba-fails-to-add-a-user-entry-how-do-i-fix-this
+      
+      You need to create a UNIX user named student before you create a samba user named student.
+
+
+** JSP
+*** Environment
+**** eclipse
+     delete .metadata if can't add new server
+**** tomcat8 and mysql
+     - Install mysql and tomcat8
+     #+BEGIN_SRC sh
+     sudo apt-get install mysql-client-5.7 mysql-server-5.7
+     sudo apt-get install tomcat8
+     #+END_SRC
+   
+     - Configure tomcat8 for eclipse
+       Copy files in /etc/tomcat8 to directory servers under workspace of eclipse
+       #+BEGIN_SRC sh
+       cp -r /etc/tomcat8 /path/to/servers/
+       #+END_SRC
+**** tomcat8 configuration
+
+     http://pub.admc.com/howtos/tomcat/ch05.html
+***** Default =$CATALINE_BASE= and =CATALINE_HOME= by starting from service
+      
+      can be read from /etc/init.d/tomcat8, from =systemctl cat tomcat8.service=
+
+      #+BEGIN_SRC sh
+      # Directory where the Tomcat 8 binary distribution resides
+      CATALINA_HOME=/usr/share/$NAME
+
+      # Directory for per-instance configuration files and webapps
+      CATALINA_BASE=/var/lib/$NAME
+      #+END_SRC
+
+***** Good and easy documentation for tomcat configuration
+      
+      https://www.mulesoft.com/tcat/understanding-apache-tomcat
+
+      Since tomcat configuration may vary from version to version, so it's wise to check the documentation from the official site.
+*** Connecting to MySql
+**** JSP connecting to mysql require special .jar file in
+     #+BEGIN_SRC sh
+     /usr/share/tomcat8/lib/*.jar
+     #+END_SRC
+**** Mysql creating and using table
+***** Using mysql script
+      - In the bash
+        #+BEGIN_SRC sh
+        mysql db_name < text_file
+        #+END_SRC
+
+      - After running the mysql shell, enter:
+      #+BEGIN_SRC mysql
+      source /paht/to/your/*.sql
+      #+END_SRC
+***** Creating mysql table
+      #+BEGIN_SRC mysql
+      create table score (number int, name varchar(20), math int, english int, physic int);
+      #+END_SRC
+      1. The length of varchar ranges from *1* to *65535*
+      2. Mysql has the type *DATE*
+*****
+***** Show Table
+      - List all tables
+        #+BEGIN_SRC mysql
+        show tables;
+        #+END_SRC
+      - Describe table
+        #+BEGIN_SRC mysql
+        describe score;
+        #+END_SRC
+
+***** Loading Data into a Table
+****** Create a score.txt
+       #+BEGIN_SRC text
+       000 zhangsan 90 90 90
+       001 lisi     90 90 90
+       002 sample   \N \N \N
+       #+END_SRC
+       1. Values separated by tabs, ordered in which the columns were listed in the *CREATE TABLE*
+       2. Missing values use NULL values, using *\N* (backslash, capital-N)
+****** Use mysql to load txt
+       #+BEGIN_SRC mysql
+       load data local infile '/path/score.txt' into table score;
+       #+END_SRC
+
+       -  If you created the file on Windows with an editor that uses \r\n as a line terminator, you should use this statement instead
+       #+BEGIN_SRC mysql
+       load data local infile '/path/score.txt' into table score
+       lines terminated by '\r\n';
+       #+END_SRC
+****** Use *Insert*
+       #+BEGIN_SRC mysql
+       insert into score
+       values ('000', 'zhangsan', '90', '90', '90');
+       #+END_SRC
+***** Retrieving Information from a table
+      https://dev.mysql.com/doc/refman/5.7/en/retrieving-data.html
+***** Update column
+
+      #+BEGIN_SRC mysql
+      update TABLE set colName = new where colName = condition
+      #+END_SRC
+***** GUI
+      install workbench
+
+      #+BEGIN_SRC sh
+      sudo apt-get install mysql-workbench
+      #+END_SRC
+* Ubuntu
+** Vagrant
+*** vagrant box for Chinese users
+
+    https://github.com/cybertk/vagrant-box-ubuntu-cn
+    #+BEGIN_SRC sh
+    vagrant init ubuntu-cn/trusty64
+    #+END_SRC
+
+** ssmtp
+
+   Referenced from http://asange.blog.51cto.com/7125040/1357743
+   
+   To send emails through ssmtp
+   
+   #+BEGIN_SRC sh
+   sudo apt install ssmtp
+   #+END_SRC
+
+   After installing, configuration.
+
+   1. Edit =/etc/ssmtp/ssmtp.con=
+      #+BEGIN_EXAMPLE
+      #
+      # Config file for sSMTP sendmail
+      #
+      # The person who gets all mail for userids < 1000
+      # Make this empty to disable rewriting.
+      root=自己邮箱地址
+      # The place where the mail goes. The actual machine name is required no
+      # MX records are consulted. Commonly mailhosts are named mail.domain.com
+      mailhub=邮箱imap服务器地址
+      # Where will the mail seem to come from?
+      #rewriteDomain=
+      # The full hostname
+      hostname=主机名
+      # Are users allowed to set their own From: address?
+      # YES - Allow the user to specify their own From: address
+      # NO - Use the system generated From: address
+      FromLineOverride=YES
+      UseTLS=YES
+      AuthUser=邮箱地址
+      AuthPass=邮箱密码
+      #+END_EXAMPLE
+   2. Second, edit =/etc/ssmtp/revaliases=
+      #+BEGIN_EXAMPLE
+      # sSMTP aliases
+      #
+      # Format:   local_account:outgoing_address:mailhub
+      #
+      # Example: root:your_login@your.domain:mailhub.your.domain[:port]
+      # where [:port] is an optional port number that defaults to 25.
+      root:自己的邮箱:邮箱imap服务器地址:端口
+      #如自己的邮箱是腾讯的企业邮箱：
+      #root:自己邮箱:imap.exmail.qq.com:465
+      #+END_EXAMPLE
+   3. Test
+      #+BEGIN_SRC sh
+      echo "aaa" | mail -s "bbb" your_login@your.domain
+      #+END_SRC
+** Virtualbox
+
+   *modprobe vboxdrv* was issued
+
+   *sudo apt-get --reinstall install virtualbox-dkms*
+** Slow I/O for usb ports
+   https://bugs.launchpad.net/ubuntu/+source/nautilus/+bug/1208993
+
+   According to this, the *vm.dirty_background_ratio = 5*
+   *vm.dirty_ratio = 10* Affect the speed of I/O
+** To change default kernel
+
+
+** npm
+
+   中国镜像cnpm
+   https://npm.taobao.org/
+
+   =cnpm=
+
+   In the case of using zsh
+   #+BEGIN_SRC sh
+   echo '\n#alias for cnpm\nalias cnpm="npm --registry=https://registry.npm.taobao.org \
+   --cache=$HOME/.npm/.cache/cnpm \
+   --disturl=https://npm.taobao.org/dist \
+   --userconfig=$HOME/.cnpmrc"' >> ~/.zshrc && source ~/.zshrc
+   #+END_SRC
+
+** Nodejs
+   
+   #+BEGIN_SRC sh
+   sudo apt install nodejs-legacy
+   #+END_SRC
+
+** To check the Intergrated graphics card memory usage
+   #+BEGIN_SRC sh
+   dmesg | grep drm
+   #+END_SRC
+** boot time analyze
+   
+   To analyze boot time application
+   
+   #+BEGIN_SRC sh
+   systemd-analyze blame
+   #+END_SRC
+
+   https://askubuntu.com/questions/760694/really-slow-boot-on-16-04
+
+** About external 4k monitor
+   Apperantly the Intel skylake CPU and Intel 520 graphic card has some issues regrading external monitor. I have the option to enable 4k 60hz. However, on trying to modify the display settings, I constantly encountered screen freezing, for which I have to press the power button for 5 seconds to enforce shutdown. So I upgraded my kernel to =4.4.8-wily=, which fixed the constant freezing but no help on actually enabling 4k 60hz. And finally, I upgraded my kernel to =4.10.2-041002-generic=, and also my =mesa=. After reboot, I finally see the beautiful 4k 60hz of display. Thank god, almost go nuts!
+*** Install new version of kernel
+    Go to kernel.ubuntu.com/~kernel-ppa/mainline
+
+    Download the required =linux-header-*.deb= and =linux-image-*.deb=
+
+    run it with =dpkg -i= and follow through. Maybe use =apt -f install= to fix dependency
+
+*** Upgrading mesa
+
+    #+BEGIN_SRC 
+    sudo add-apt-repository ppa:ubuntu-x-swat/updates
+    sudo apt update && sudo apt dist-upgrade
+    #+END_SRC
+
+*** Checking mesa version
+    =glxinfo | grep "OpenGL version"=
+** Apt-fast
+*** Mirror server
+ MIRRORS = ('http://mirrors.nju.edu.cn/ubuntu/, http://mirrors.aliyun.com/ubuntu/, http://mirrors.cn99.com/ubuntu/, https://mirrors.tuna.tsinghua.edu.cn/ubuntu/, http://mirrors.sohu.com/ubuntu/, http://cn.archive.ubuntu.com/ubuntu/, http://mirrors.opencas.org/ubuntu/')
+
+** xfce4
+   To check the version of xfce4, run =xfce4-about=
+
+** Dealing with hiDPI
+*** To play well with high resolution, tweak xubuntu scaling
+    
+    1. Open up setting editor, and find xsettings
+
+    2. On gtk session
+       1. Change =CursorThemeSize = 36=, original 24, gtk
+
+       2. Change =IconSizes = gtk-button=24,24=, original gtk-buttion=16,16, Actually this line remain unchanged
+
+    3. Change =DPI = 120=, original 120, Xft
+    4. Switch to xfce4-desktop
+       1. Tweak =Icon-size = 54=, original 48
+
+*** Applications  
+    
+**** Browsers
+     
+***** Firefox
+      Open Firefox advanced preferences page =(about:config)= and set parameter =layout.css.devPixelsPerPx= to =2= (or find the one that suits you better; =2= is a good choice for Retina screens). 
+
+**** References
+     1. https://wiki.archlinux.org/index.php/HiDPI#Xfce
+     
+     2. https://askubuntu.com/questions/652021/adapt-font-and-icon-sizes-to-high-definition-screen-resolutions-in-ubuntu-studio
+
+     3. http://www.pclinuxos.com/forum/index.php?topic=139690.0
+
+** flux
+
+   Doesn't work with nvidia
+
+   https://forum.justgetflux.com/topic/2373/sorry-we-only-support-8-and-10-bit-displays-right-now/14
+
+   https://forum.justgetflux.com/topic/3077/f-lux-not-working-on-ubuntu-16-06-with-gtx-1070-using-nvidia-367/11
+   
+   Software to protect eyes
+
+   #+BEGIN_SRC sh
+   sudo add-apt-repository ppa:nathan-renniewaldock/flux
+   
+   sudo apt-get update
+
+   sudo apt-get install fluxgui
+   #+END_SRC
+
+   Still need to get up from time to time
+
+** shell
+   
+   About bracketed paste mode
+   https://cirw.in/blog/bracketed-paste
+  
+   This mode can prevent a pasted newline being recognized as an "Enter" key, and executed by terminal
+
+   Note: this mode can result in weird character in emacs shell-mode
+
+   As a workaround, disable it in zshrc
+   https://emacs.stackexchange.com/questions/19848/weird-characters-in-shell-mode-with-zsh
+   #+BEGIN_SRC sh
+   if [[ $TERM = dumb ]]; then
+   unset zle_bracketed_paste
+   fi
+   #+END_SRC
+   
+   Now I can live without terminal! Goodbye terminator
+
+** which
+   To find the path to a command file
+
+   #+BEGIN_SRC sh
+   which bash
+   #+END_SRC
+** Nvidia
+*** Fail to rotate screem
+    The only solution is to disable nvidia driver
+    http://tuxtweaks.com/2010/05/ubuntu-enable-rotation-nvidia/
+   
+** Calculator
+   #+BEGIN_SRC sh
+   sudo apt install qalculate
+   #+END_SRC
+** Latex
+   LaTeX can be a new set of presentation skills, it's easier to build formula from LaTeX than WordDoc
+
+   To avoid all kinds of troubles, I have installed almost every latex packages I find...
+
+   Results of ~history | grep "sudo apt install"~
+
+   #+BEGIN_EXAMPLE
+    sudo apt install texlive-binaries
+    6640  sudo apt install latex
+    6642  sudo apt install texlive-latex-base
+    6798  sudo apt install dvipng
+    8127  sudo apt install texlive-latex-extra
+    8130  sudo apt install texlive-latex-base
+    8139  sudo apt install tex-common 
+    8145  sudo apt install texlive-lang-all
+    8147  sudo apt install texlive-latex-recommended
+    8149  sudo apt install texlive-xetex
+    8158  sudo apt install texlive-full
+   #+END_EXAMPLE
+
+   However, to compile Chinese, I can't use pdflatex. Therefore adding =#+LATEX_COMPILER: xelatex= above the org file. And run =M-x org-latex-export-to-pdf=
+
+   Also Customize the variable of =org-latex-classes=, refering to this site
+   https://emacs-china.org/t/spacemacs-org-mode-pdf/1577/10
+*** font not found using xeCJK
+    running fc-match to find available fonts
+    #+BEGIN_EXAMPLE
+    \usepackage{xeCJK}
+    \setCJKmainfont{Fonts found in fc-match output}
+    #+END_EXAMPLE
+*** One overall subscript with double integral
+    https://tex.stackexchange.com/questions/284654/one-overall-subscript-with-double-integral
+*** Latex fragments in emacs org
+
+    Bigger latex fragment in emacs org-mode
+
+    https://tex.stackexchange.com/questions/78501/change-size-of-the-inline-image-for-latex-fragment-in-emacs-org-mode
+
+    - In =.emacs=
+      #+BEGIN_SRC elisp
+      ;; bigger latex fragment
+      (plist-put org-format-latex-options :scale 1.5)
+      #+END_SRC
+
+    About this mode
+    http://orgmode.org/manual/LaTeX-fragments.html
+*** org-preview-latex-fragment
+
+    default key bindings
+    #+BEGIN_SRC 
+    C-c C-x C-l
+    #+END_SRC
+
+    org-compile-file: File "/tmp/orgtex9382UFE.dvi" wasn't produced.  Please adjust 'dvipng' part of `org-preview-latex-process-alist'.
+    #+BEGIN_SRC sh
+    sudo apt install texlive-latex-extra
+    #+END_SRC
+
+    require dvipng
+    #+BEGIN_SRC 
+    sudo apt install dvipng
+    #+END_SRC
+*** In spacemacs
+    using the latex layer, add to the bottom: local variables:
+    #+BEGIN_EXAMPLE
+    %%% Local Variables: 
+    %%% mode: LaTeX
+    %%% TeX-PDF-mode: t
+    %%% TeX-engine: xetex 
+    %%% End:
+    #+END_EXAMPLE
+** Edit grub to shorten waiting time
+   #+BEGIN_SRC sh
+   sudo gedit /etc/default/grub
+   #+END_SRC
+   change GRUB_TIMEOUT=0
+
+   Or if I want to boot into linux by default, and boot into windows only when reboot
+   #+BEGIN_SRC GRUB
+   GRUB_DEFAULT=saved
+   GRUB_TIMEOUT=0.01
+   #+END_SRC
+
+   To find which entry it contained
+   #+BEGIN_SRC sh
+   grep menuentry /boot/grub/grub.cfg    
+   #+END_SRC
+   - grub-set-default Sets the default boot entry until changed. 
+   - grub-reboot This command sets the default boot entry for the next boot only. The format of the command is the same as for grub-set-default (see above). 
+   grub-reboot Windows
+** fcitx
+   Not show candidate words
+   #+BEGIN_SRC sh
+   sudo apt remove fcitx-ui-qimpanel
+   #+END_SRC
+** Precise32
+   edit /etc/apt/sources.list
+   switching us to cn
+   Not sure if this will work
+** Disk SSD(Solid State Drive)
+** Disk HDD (Hard Disk Drive)
+*** Defragmentation
+    https://www.howtogeek.com/115229/htg-explains-why-linux-doesnt-need-defragmenting/
+    https://www.howtogeek.com/howto/37659/the-beginners-guide-to-linux-disk-utilities/
+*** Ram disk
+    I’ve seen a well-placed RAM disk drop disk I/O on a VM from 3500 IOPS to 100 IOPS. I’ve also seen people store important data in their RAM disks, just to have a reboot wipe it all away. This is a powerful tool, so be creative but safe, and remember that memory management is a balance between RAM disk, application data, and file cache.
+    https://lonesysadmin.net/2013/12/14/use-ram-disk-improve-disk-access-times/
+*** Write back and write through
+**** Write back cache
+
+     Write back means that when I/O writes to disk, it writes to the cache and report back that I/O has completed(risky, data only in cache)
+
+**** Write through cache
+
+     Means that when I/O comes, it writes to back cache and disk, then report back that I/O has completed(safe, data in disk and cache(for read))
+
+*** virtual memory dirty page
+
+    https://lonesysadmin.net/2013/12/22/better-linux-disk-caching-performance-vm-dirty_ratio/
+
+    - vm.dirty_background_ratio
+
+      Percentage of dirty pages in memory (General case)
+
+    - vm.dirty_ratio
+      
+      The maximum percentage of dirty pages, must be commited to disk when reached (Extreme case)
+
+    Tuning conf
+    #+BEGIN_SRC sh
+    sudo gedit /etc/sysctl.conf
+
+    #add lines
+    vm.dirty_background_ratio = 5
+    vm.dirty_ratio = 10
+
+    # To take effect
+    sysctl -p
+
+    # To see statistics on the page cache in /proc/vmstat
+    cat /proc/vmstat | egrep "dirty|writeback"
+    #+END_SRC
+*** Edit swappiness(For SSD)
+    #+BEGIN_SRC sh
+    cat /proc/sys/vm/swappiness
+    sudo sysctl vm.swappiness=1
+    #+END_SRC
+
+    Permanent change
+    #+BEGIN_SRC sh
+    sudo gedit /etc/sysctl.conf
+    #+END_SRC
+
+    Add
+    #+BEGIN_SRC config
+    vm.swappiness=1
+    #+END_SRC
+*** TODO Read Article
+    https://wiki.archlinux.org/index.php/Solid_State_Drives_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+** configure-trackpoint
+   Adding graphical support for IBM trackpad, using ppa source
+   #+BEGIN_SRC sh
+   sudo add-apt-repository ppa:linrunner/thinkpad-extras
+   sudo apt-get update
+   #+END_SRC
+
+** shadowsocks
+
+*** install shadowsocks
+    #+BEGIN_SRC sh
+    sudo add-apt-repository ppa:hzwhuang/ss-qt5
+    sudo apt-get update
+    sudo apt-get install shadowsocks-qt5
+    #+END_SRC
+
+*** Share shadowsocks in LAN
+    
+    https://blog.huzhifeng.com/2017/01/21/Shadowsocks/
+
+    
+** bochs
+*** setting up bochs
+
+    Install necessary apt packages
+    #+BEGIN_SRC sh
+    sudo apt-get install vgabios bochs bochs-x bximage bochs-sdl bochsbios
+    #+END_SRC
+
+    Configuation file(To be Add up)
+
+    The most important part for which I waste a ton of time doing is tha black screen when starting bochs
+    Just type "*Continue" in the console and it will work fine, it's just a debug function in bochs... I wish that I could find out it earlier...*
+    
+*** bochs configuration
+
+    using sdl library increase the process speed of bochs incredibly
+    Previously, I have encounter a problem with a self-compiled bochs, which keep prompting me that sdl is not available.
+    I did not delete self-compiled bochs but have to rename it from 
+    #+BEGIN_SRC sh
+    mv /usr/local/bin/bochs /usr/local/bin/boch-what
+    #+END_SRC
+    Temporarily solution
+
+** Documentation
+*** Doxygen
+** git
+*** Remove file from repository but keep it locally
+
+    Will stage the deletion of the "somedir", but doesn't touch anything on disk.
+    #+BEGIN_SRC sh
+    git rm --cached -r somedir
+    #+END_SRC 
+
+    This also works for a file
+    #+BEGIN_SRC sh
+    git rm --cached -r somefile.txt
+    #+END_SRC
+
+*** Check gitconfig
+    #+BEGIN_SRC sh
+    cat ~/.gitconfig
+    #+END_SRC
+*** How to make Git properly display UTF-8 encoded pathnames in the console window?
+    #+BEGIN_SRC sh
+    git config [--global] core.quotepath off
+    #+END_SRC
+*** Mind that git clone with sudo
+    #+BEGIN_SRC sh
+    sudo git clone ...
+    #+END_SRC
+    This will give you unnecessary trouble especially git cloning .emacs.d emacs configuration
+*** Git credential caching
+    After enabling credential caching, it will be cached for 7200 seconds (2 hour).
+    #+BEGIN_SRC sh
+    git config --global credential.helper "cache --timeout 7200"
+    #+END_SRC
+** Terminal
+*** Terminator
+    A terminal emulator that can splict window
+    #+BEGIN_SRC sh
+    sudo apt install terminator
+    #+END_SRC
+*** bash
+*** zsh
+**** Configuring to detect if a command does not exist, suggest installation
+     This feature is provided by the command-not-found package
+     Making it active in zsh
+     #+BEGIN_SRC sh
+     ~/.zshrc
+
+     . /etc/zsh_command_not_found
+     #+END_SRC
+** Database
+   Enter password to log into mysql
+   #+BEGIN_SRC sh
+   mysql -u root -p
+   #+END_SRC
+** Xubuntu
+*** Shortcut
+**** Set windows always on top
+
+     #+BEGIN_SRC 
+     ALT + F12
+     #+END_SRC
+
+**** Resize window
+
+     #+BEGIN_SRC 
+     ALT + F5
+     
+     #+END_SRC
+
+*** ftp
+    - To connect to ftp using thunar
+      [[https://wiki.archlinux.org/index.php/thunar][reference]]
+    #+BEGIN_SRC sh
+    sudo apt install gvfs-fuse gvfs-backends
+    #+END_SRC
+*** No mouse after suspending
+    As a workaround, I've found that switching between virtual consoles (Ctrl-Alt-F1 then Ctrl-Alt-F7) brings the pointer back.
+** Software
+*** Writing documentation
+    The AbiWord is definitely much better processing doc or docx than LibreOffice
+**** WPS
+***** Problems with fonts and formula
+      Some references
+      https://askubuntu.com/questions/861588/wps-office-equation-editor
+** Services
+*** view the content of a unit file and all associated drop-in snippets
+    =systemctl cat unit=
+*** Slow shutdown time due to hanged service
+    #+BEGIN_SRC sh
+    sudo systemctl edit cups-browsed.service
+    sudo systemctl daemon-reload
+    #+END_SRC
+
+    However, after I upgrade to the newest CUPS-filters, the issues have gone, and don't need to edit the conf
+    
+*** Start Service on Boot in Ubuntu
+    - Use it to start/stop a service. Does not persist after reboot
+    #+BEGIN_SRC sh
+    systemctl start SERVICE
+    systemctl stop SERVICE
+    #+END_SRC
+
+    - Turns the service on/off, on the next reboot or on the next start event. It persists after reboot.
+    #+BEGIN_SRC sh
+    systemctl enable SERVICE
+
+    systemctl disable SERVICE
+    #+END_SRC
+
+    - Check if a service is currently configured to start or not on the next reboot.
+    #+BEGIN_SRC sh
+    systemctl is-enabled SERVICE
+    #+END_SRC
+
+    - Show all the information about the service.
+    #+BEGIN_SRC sh
+    systemctl show SERVICE
+    #+END_SRC
+
+    - Completely disable a service by linking it to /dev/null; you cannot start the service manually or enable the service.
+    - Removes the link to /dev/null and restores the ability to enable and or manually start the service.
+    #+BEGIN_SRC sh
+    sudo systemctl mask SERVICE
+    sudo systemctl unmask SERVICE
+    #+END_SRC
+
+    #+BEGIN_SRC sh
+    update-rc.d SERVICE defaults
+    update-rc.d -f SERVICE remove
+    #+END_SRC
+    
+    
+*** thunar
+    sometimes when thunar --daemon was closed, it can be a little uncomfortable to have to execute thunar and hang emacs, so to restart thunar --daemon in background
+    #+BEGIN_EXAMPLE
+    thunar --daemon &
+    #+END_EXAMPLE
+    The & run and keeps it in the background
+    https://www.maketecheasier.com/run-bash-commands-background-linux/
+
+* Emacs
+
+** locale
+   In computering, a locale is a set of parameters that defines the user's language,region and any special variant preferences that user wants to see in their user interface. [from wiki]
+
+   [[https://wiki.archlinux.org/index.php/locale][doc from arch]]
+
+   Setting LC_ALL will have all other LC_* all take LC_ALL's content
+
+** EasyPG Assistant
+
+   [[https://www.gnu.org/software/emacs/manual/html_mono/epa.html][EasyPG Assistant user's manual]]
+   
+*** classic usage with mu4e encrypt password
+    =epa-encrypt-file=
+** mu4e
+   
+   [[https://gist.github.com/areina/3879626][mu4e configuration example]]
+
+   [[http://blog.csdn.net/csfreebird/article/details/52973188][spacemacs email layer]]
+
+*** python regular expression
+*** Using epa to encrypt config
+** epa-encrypt-file
+** Trailing whitespace
+   
+*** To delete trailing-whitespaces
+    use command =M-x delete-trailing-whitespace=
+** Org-mode
+
+*** Org and GTD
+    http://orgmode.org/worg/org-gtd-etc.html
+
+*** Org and Pomodoro
+    https://cirillocompany.de/pages/pomodoro-technique
+  
+** Emacs pinky
+   https://en.wikipedia.org/wiki/Sticky_keys
+   https://en.wikipedia.org/wiki/Emacs#Emacs_pinky
+** Dealing with high resolution, hiDPI
+
+   A reference:
+
+   https://github.com/syl20bnr/spacemacs/issues/6005
+
+** Input method
+   
+   http://www.linuxdiyf.com/linux/12562.html
+   
+*** sogoupinyin Download from sogou official
+    use =sudo dpkg -i= to install deb
+   
+** terminal in emacs
+
+   I have tried eshell, shell, and term
+   As The article suggests, eshell and shell does not play well with zsh.\n
+   But term captures most of my =C= and =M= that I want to pass to emacs
+
+   https://superuser.com/questions/361566/zsh-completion-will-not-work-in-emacs-shell
+** open file from terminal
+   
+   Add =alias fireup="emacsclient -n"=
+
+   =M-x server-start= inside the Emacs session, then use ~emacsclient -n~ file1 file2 ... to add files to the existing Emacs. There are additional options you might want to use, e.g. ~-c~ to open the files in a new window (frame).
+
+** WYSIWYG
+
+   An interesting concept: what you see is what you get
+
+   WYSIWYG (/ˈwɪziwɪɡ/ WIZ-ee-wig) is an acronym for "what you see is what you get". In computing, a WYSIWYG editor is a system in which content (text and graphics) can be edited in a form closely resembling its appearance when printed or displayed as a finished product, such as a printed document, web page, or slide presentation.
+
+** Apply changes without restarting Emacs
+
+   #+BEGIN_SRC elisp
+   dotspacemacs/sync-configuration-layers
+   #+END_SRC
+
+** scroll-all-mode
+   
+   A very creative way to scroll multiple windows is to use a macro!
+   or scroll-all-mode
+   https://emacs.stackexchange.com/questions/288/synchronized-scrolling-in-two-windows
+
+** magit
+   #+BEGIN_SRC elisp
+   (save-buffer)
+   (magit-stage-modified)
+   (magit-commit (list "~m" msg))
+   (magit-push-current-to-upstream nil)
+   #+END_SRC
+** Package install
+   changing package archives list melpa https into http may work, emacs not supporting https due to platform
+** helm-gtags-find-tag
+   First we need to install *gtags* to build the database that *ggtags-find-tag-dwim*
+   #+BEGIN_SRC sh
+   sudo apt-get install global
+   #+END_SRC
+
+   And we also need *ggtags* and *helm-gtags*
+   #+BEGIN_SRC el
+   (package-install ggtags)
+   (package-install helm-gtags)
+   #+END_SRC
+
+   Hava fun jumping around definition, BTW, sadly, windows can't install global, so no fun there
+** Impatient-mode
+   Enable the web server provided by simple-httpd:
+   #+BEGIN_SRC Emacs
+   M-x httpd-start
+   #+END_SRC
+
+   #+BEGIN_SRC Emacs
+   M-x impatient-mode
+   #+END_SRC
+
+   And then point your browser to http://localhost:8080/imp/, select a buffer, and watch your changes appear as you type!
+** Org-mode
+*** Documentation
+    
+    http://orgmode.org/org.html
+
+*** Emphasis and monospace
+
+    You can make words *bold*, /italic/, _underlined_, =verbatim= and ~code~, and, if you must, ‘+strike-through+’. Text in the code and verbatim string is not processed for Org mode specific syntax, it is exported verbatim. 
+    
+*** Link
+
+    - link Hyperlink C-c C-l
+
+* python
+  
+** using virtualenv can give you clean developing environment
+   Knows clearly what you want in the environment during development
+   use *virtualenv* to create python3 environment
+   virtualenv -p /usr/bin/python3 ENV
+* Android
+  
+** Flash custom ROM
+   
+*** Using fastboot
+
+**** Tutorial of fastboot
+
+     https://android.gadgethacks.com/how-to/know-your-android-tools-what-is-fastboot-do-you-use-it-0155640/
+
+**** Stock for ROM
+     https://firmware.center/firmware/Motorola/Moto%20G%20%282nd%20gen-2014%29/Stock/
+* Projects
+** Building your website that show your working process
+*** Specification
+*** Goals
+**** TODO Come up with a framework
+     SCHEDULED: <2017-04-21 Fri>
+** A minor mode to calculate and save the time I spend on editing a file
+   - Whenever a file is saved, like using time-stamp, we can also save the time interval between two time-stamps in order to know the total time spent on editing certain files
+* Problems
+  - Why say (null nil) and (not nil) 'null and 'not are doing the same thing
+  - How could 'nil be representing both a boolean and a list??
+  - It's actually quite dangerous if we think that computers can store all the infomation for us permanently, since some events can easily destory our electrical storage system
+* Settings
+Local Variables:
+mode: org
+coding: utf-8
+End:
+* Thoughts maybe
+** <2017-06-19 Mon>
+   说实话一开始我还不太相信。
+
+   这是一个个人主页:
+   http://www.howardism.org/
+   我看到一个片段，说每周他都在高中教课外编程课。
+
+   嗯，我看过他的网课，挺有趣的，足够吸引人，当时就觉得这家伙挺厉害的。
+
+   我不知道外国的大学教授怎么样，但是这个兼职高中老师的教学能力我是认可的。
+
+   “大学老师教编程还没有美国高中老师教变成来得厉害”是我随后想到的一句话。
+
+   我知道大学课堂不能没有理论，这是毋庸置疑的，没有理论跟职业学校确实没有什么差别。
+
+   但是编程真的是可以翻翻书就可以弄懂的吗？辛辛苦苦考上大学，满怀希望坐在课堂上，讲得东西却不是我想要的。
+
+   起码，没有吸引到我。如果只是单纯在讲ppt，在讲书，那么我觉得这门课的价值就被限制住了。
+   
+   老师们并没有把编程最美丽的一面展现给我们。
+
+   给我的感觉就是时间花了挺久的，但是好像什么都没有学到。这不利于学习的循环。
+
