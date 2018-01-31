@@ -1,3 +1,8 @@
+#+TITLE: hello-world
+#+AUTHOR: Joy
+#+tag: study
+#+categories: Joy
+#+DATE: <2018-01-31 Wed>
 * [#A] Hello World testing                                         :homework:
   :LOGBOOK:
   CLOCK: [2018-01-31 三 16:49]--[2018-01-31 三 16:49] =>  0:00
