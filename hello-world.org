@@ -1,0 +1,25 @@
+* [#A] Hello World testing                                         :homework:
+  :LOGBOOK:
+  CLOCK: [2018-01-31 三 16:49]--[2018-01-31 三 16:49] =>  0:00
+  :END:
+
+  - 在标题后面用 :tag:标注任务的情景
+  - C-c C-q 可以编辑TAG
+
+* priority
+  - 在标题前用[#A] [#B] [#C]标注优先级
+  - 用Shift+上下键调整优先级
+
+* record and time analysis
+
+** 记录时间
+   - C-c C-x c-i 开始计时
+   - C-c C-x C-o 结束计时
+
+** 分析时间
+   
+   - C-c C-x C-r 创建今日的时间统计表格
+   - C-c a 进入agenda view
+     使用C-c [添加该任务文件到agenda中(Org->File List Agenda)
+     R 创建时间统计表格
+
