@@ -1,0 +1,8 @@
+#+TITLE: hello-world
+#+AUTHOR: Joy
+#+tag: gdb
+#+categories: Joy
+#+DATE: <2018-02-05 Mon>
+
+* GUI in command line
+  *Ctrl-x a*
