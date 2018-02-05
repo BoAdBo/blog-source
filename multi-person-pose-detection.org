@@ -1,0 +1,26 @@
+#+TITLE: multi-person pose detection
+#+AUTHOR: Joy
+#+tag: machine learning
+#+categories: Joy
+#+DATE: <2018-01-31 Wed>
+
+* problems
+  1. occluded keypoints
+  2. invisible keypoints 
+  3. complex background
+
+* papers
+
+  1. Action Recognition from a Distributed Representation of Pose and Appearance, CVPR,2010
+  2. Combining Randomization and Discrimination for Fine-Grained Image Categorization, CVPR,2011
+  3. Object and Action Classification with Latent Variables, BMVC, 2011
+  4. Human Action Recognition by Learning Bases of Action Attributes and Parts, ICCV, 2011
+  5. Learning person-object interactions for action recognition in still images, NIPS, 2011
+  6. Weakly Supervised Learning of Interactions between Humans and Objects, PAMI, 2012
+  7. Discriminative Spatial Saliency for Image Classification, CVPR, 2012
+  8. Expanded Parts Model for Human Attribute and Action Recognition in Still Images, CVPR, 2013
+  9. Coloring Action Recognition in Still Images, IJCV, 2013
+  10. Semantic Pyramids for Gender and Action Recognition, TIP, 2014
+  11. Actions and Attributes from Wholes and Parts, arXiv, 2015
+  12. Contextual Action Recognition with R*CNN, arXiv, 2015
+  13. Recognizing Actions Through Action-Specific Person Detection, TIP, 2015

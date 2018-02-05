@@ -1,0 +1,16 @@
+#+TITLE: Python Module
+#+AUTHOR: Joy
+#+tag: python
+#+categories: Joy
+#+DATE: <2000-02-05 六>
+* The Module Search Path
+  When a module named spam is imported
+  1. Search built-in module
+  2. Search a list of directories given by the variable *sys.path*
+     - The directory containing the input script (or the current directory when no file is specified).
+     - PYTHONPATH (a list of directory names, with the same syntax as the shell variable PATH).
+     - The installation-dependent default.
+       
+  3. 
+
+
