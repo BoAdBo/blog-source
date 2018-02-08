@@ -1,3 +1,8 @@
+#+TITLE: regular expression
+#+AUTHOR: Joy
+#+tags: regex
+#+categories: Joy
+#+DATE: <2018-02-05 Mon>
 
 *C-q C-j* to insert newline in minibuffer
 cited from https://stackoverflow.com/questions/613022/how-to-replace-a-character-with-a-newline-in-emacs

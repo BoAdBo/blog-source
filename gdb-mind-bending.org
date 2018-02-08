@@ -1,6 +1,6 @@
-#+TITLE: hello-world
+#+TITLE: gdb-mind-bending
 #+AUTHOR: Joy
-#+tag: gdb
+#+tags: gdb
 #+categories: Joy
 #+DATE: <2018-02-05 Mon>
 

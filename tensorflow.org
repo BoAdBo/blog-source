@@ -1,6 +1,6 @@
 #+TITLE: installation of tensorflow
 #+AUTHOR: Joy
-#+tag: machine-learning
+#+tags: machine-learning
 #+categories: Joy
 #+DATE: <2018-01-31 Wed>
 

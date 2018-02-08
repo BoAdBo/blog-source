@@ -1,8 +1,8 @@
 #+TITLE: Python Module
 #+AUTHOR: Joy
-#+tag: python
+#+tags: python
 #+categories: Joy
-#+DATE: <2000-02-05 六>
+#+DATE: <2018-02-05 六>
 * The Module Search Path
   When a module named spam is imported
   1. Search built-in module
