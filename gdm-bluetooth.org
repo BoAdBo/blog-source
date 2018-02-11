@@ -1,0 +1,12 @@
+#+TITLE: gdm-bluetooth
+#+DATE: <2018-01-22 Mon 15:03>
+#+TAGS: Ubuntu
+#+CATEGORIES: Joy
+
+* gdm startup session 
+
+  Described in this post  [[https://deanproxy.com/posts/2017/02/24/crazy-bluetooth-issues-on-linux-with-bose-qc35-headphones][forum-answer]]
+
+  "In order to prevent GDM from capturing the A2DP sink on session start"
+  
+  Anyway, after fixing and reboot, bluetooth works fine with A2DP sink
