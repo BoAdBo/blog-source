@@ -1,11 +1,43 @@
-#+TITLE: installation of tensorflow
+#+TITLE: tensorflow
 #+AUTHOR: Joy
-#+tags: machine-learning
-#+categories: Joy
+#+TAGS: machine-learning
+#+CATEGORIES: Joy
 #+DATE: <2018-01-31 Wed>
 
-* pandas
-  pandas is an open source, BSD-licensed library providing high-performance, easy-to-use data structures and data analysis tools for the Python programming language.
+* preparation
+** pandas
+   pandas is an open source, BSD-licensed library providing high-performance, easy-to-use data structures and data analysis tools for the Python programming language.
 
-* Install CUDNNv6.0 onto CUDAv8.0
-  Basically moving the *lib64* and *include* to */usr/local/cuda-8.0/lib64-or-include*, Note not the symbolic link!!! Which is */usr/local/cuda/lib64-or-include*, that's not neccessarily cuda-8.0.
+** Install CUDNNv6.0 onto CUDAv8.0
+   Basically moving the *lib64* and *include* to */usr/local/cuda-8.0/lib64-or-include*, Note not the symbolic link!!! Which is */usr/local/cuda/lib64-or-include*, that's not neccessarily cuda-8.0.
+
+   
+** Non-linearity
+   The need for non-linearity comes from the fact, that we connect neurons together and the fact the linear function on top of linear function is itself a linear function. So, if didn’t have non-linear function applied in each neuron, the neural network would be a linear function, thus not more powerful than a single neuron. [[https://towardsdatascience.com/how-do-we-train-neural-networks-edd985562b73][Quoted]]
+   如果没有非线性变换，整个网络就相当于多个线性变换，而其实多个线性变换能够用一个线性变换来表达。也就是说整个网络并不比只有一个神经元更具有表达能力。
+
+   在这里, 表达能力就是说一个模型模拟连续函数的能力, 或者说拟合数据的能力。
+* Estimators
+  Estimators encapsulate the following actions:
+    - Training
+    - Evaluation
+    - prediction
+    - export for serving
+
+  All Estimators are classes based on the tf.estimator.Estimator(tf short for tensorflow)
+
+* Pre-made Estimators
+  
+** Structure of a pre-made Estimators program
+   A TensorFlow program relying on a pre-made Estimator typically consists of the following four steps:
+
+   1. Write one or more dataset importing functions
+      Each dataset importing function must return two objects:
+      - a dictionary in which the keys are feature names and the values are Tensors (or SparseTensors) containing the corresponding feature data
+      - a tensor containing one or more labels
+   2. Define the feature columns
+      Each *tf.feature_column* identifies a feature name, its type, and any input pre-processing.
+* Custom Estimators
+  The heart of every Estimators-whether pre-made or custom is its model function, which is a method that builds graphs for training, evaluation, and prediction.
+
+
