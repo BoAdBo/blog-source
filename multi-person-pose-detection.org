@@ -1,8 +1,9 @@
-#+TITLE: multi-person pose detection
-#+AUTHOR: Joy
-#+tags: machine learning
-#+categories: Joy
-#+DATE: <2018-01-31 Wed>
+#+TITLE: Joy的学习笔记
+#+DATE: <2018-01-13 Sat 17:07>
+#+Author: NewJoy
+#+TAGS: Tensorflow, CNN, Action Detection
+#+LAYOUT: post
+#+CATEGORIES: Joy
 
 * problems
   1. occluded keypoints
@@ -24,3 +25,32 @@
   11. Actions and Attributes from Wholes and Parts, arXiv, 2015
   12. Contextual Action Recognition with R*CNN, arXiv, 2015
   13. Recognizing Actions Through Action-Specific Person Detection, TIP, 2015
+
+* Progress
+
+** Pre intro
+   
+   Inspired by this [[https://adeshpande3.github.io/adeshpande3.github.io/The-9-Deep-Learning-Papers-You-Need-To-Know-About.html][blog on DL]], it provides some intuitive insights
+
+*** More resources
+    https://cs231n.github.io/convolutional-networks/
+
+** Intro to Convolutional Neural Networks
+   Following the guide in this url
+   https://www.tensorflow.org/tutorials/layers
+
+   Heads up: there are 3 layers to build, learn with caution.
+
+*** Convolutional layers
+    虽然全连接层也可以用来学习和分类(fully connected feedforward neuron networks), 但是由于小的图片也会导致很多的参数需要训练. 如(100x100)=10000, 基本是$O(n^2)$. 采用卷积神经网络可以实现降维, 使得快速的训练成为可能. 使得网络更深更少参数.
+**** Filters
+     虽然不是纯数学上的卷积。简单来看就是
+**** Activation function
+     In computational networks, the activation function of a node defines the output of that node given an input or set of inputs.
+
+     在计算网络里面，一个节点根据一个或多个输入作出的输出定义为激活函数。
+*** Pooling Layers
+
+*** Dense(fully connected) layers
+
+** Papers
