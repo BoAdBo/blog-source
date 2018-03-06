@@ -1,0 +1,17 @@
+#+TITLE: the-great-command-line
+#+DATE: <2018-03-06 二>
+#+Author: NewJoy
+#+TAGS: CLI
+#+LAYOUT: post
+#+CATEGORIES: Joy
+
+* autossh
+  Very ease of learning, with great benefit, please do remember to edit */etc/ssh/sshd_config* to have
+  
+  #+BEGIN_EXAMPLE
+  GatewayPorts Yes
+  #+END_EXAMPLE
+
+  (service sshd restart)
+
+  https://www.everythingcli.org/ssh-tunnelling-for-fun-and-profit-autossh/
